@@ -2,7 +2,7 @@
     height: 100vh;
     width: auto;
     display: grid;
-    grid-template-rows: 15% 2% 15% 23% 35% 10%;
+    grid-template-rows: 15% 2% 17% 23% 35% 10%;
      font-family: "Courier New", monospace;
 }
 
