@@ -3,10 +3,50 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Document</title>
-    <script src="rock-paper-scissor.js"></script>
+    
 </head>
 <body>
     
+    <div class="container">
+        <div class= "header">
+            <h1>THE ROCK PAPER SCISSOR GAME</h1>
+        </div>
+        <div class="border">
+
+        </div>
+
+        <div class="buttons">
+            <button id="paper">PAPER</button>
+            <button id="rock">ROCK</button>
+            <button id="scissor">SCISSOR</button>
+
+            <h3 id="hPlayerChoice">Player choice</h3>
+            <h3 id="hComputerChoice">Computer choice</h3>
+        </div>
+
+        <div class ='choices'>            
+            <div class="playerImage">
+                <img id="playerChoice" src="" alt="">
+            </div>
+            <div class="computerImage">
+                <img id="computerChoice" src="" alt="">
+            </div>
+        </div>
+       
+        <div class="results">
+            <p id="player-score"></p>
+            <p id="computer-score"></p>
+            <p id="current-winner"></p>
+        </div>
+
+        <div class="footer">
+            <h4><a href="https://github.com/ckachuk"> developed by carlk</a></h4>
+        </div>
+
+    </div>
+
+    <script src="rock-paper-scissor.js"></script>
 </body>
 </html>

@@ -5,26 +5,30 @@
 const regex = [/^rock$/i, /^paper$/i, /^scissor$/i];
 const options = ['rock','paper','scissor'];
 
+let scorePlayer = 0;
+let scoreComputer = 0;
+const maxScore = 5;
+const itsTie = true;
+
+
 
 //user input
+const buttons = document.querySelectorAll('button');
+    
+    
 
-//function which return the user selection
-function getUserInput(){
-    let userElection = prompt("Choice: Rock - Paper - Scissors");
-    let validInput = checkValidInput(userElection); 
-
-    return validInput ? userElection.toLowerCase() : getUserInput();
-
-}
-
-
-//function which return an error message
-function errorMessage(error){
-    return console.log(`The input is invalid`);
-}
+buttons.forEach((button) => {
+    button.addEventListener('click',playRound);
+    //transition
+    button.classList.add('buttonLoaded');
+});
 
 
-//function check invalid input
+
+
+
+
+//function check invalid input (if the app is in console)
 function checkValidInput(inputElection){
     let valid = false;
     for(let i = 0; i < 3; i++){
@@ -32,6 +36,7 @@ function checkValidInput(inputElection){
             valid = true;
         }
     }
+    
     return valid;
 }
 
@@ -52,18 +57,18 @@ function getComputerSelection(){
 function getWinnerRound(userSelection, computerSelection){
     let winner = '';
     if(userSelection === computerSelection){
-        console.log(`Both chose ${userSelection} its a tie`);
+        console.log(`Both choose ${userSelection} its a tie`);
         return winner = 'tie'; //tie
     }
-    else if((userSelection ===options[0]) & (computerSelection=== options[2])){ //user chose rock and computer choice scissors 
+    else if((userSelection ===options[0]) & (computerSelection=== options[2])){ //user choose rock and computer choice scissors 
         console.log(`You win! ${userSelection} beats  ${computerSelection} `)
         return winner = 'player'; //user winner
     }
-    else if((userSelection ===options[1]) & (computerSelection=== options[0])){ //user chose paper and computer choice rock 
+    else if((userSelection ===options[1]) & (computerSelection=== options[0])){ //user choose paper and computer choice rock 
         console.log(`You win! ${userSelection} beats  ${computerSelection} `)
         return winner = 'player'; //user winner
     }
-    else if((userSelection ===options[2]) & (computerSelection=== options[1])){ //user chose scissors and computer choice paper 
+    else if((userSelection ===options[2]) & (computerSelection=== options[1])){ //user choose scissors and computer choice paper 
         console.log(`You win! ${userSelection} beats  ${computerSelection} `)
         return winner = 'player'; //user winner
     }
@@ -75,53 +80,128 @@ function getWinnerRound(userSelection, computerSelection){
 
 
 
-//function which display result
-function displayCurrentResult(winnerRound, scorePlayer, scoreComputer){
-    console.log(`The score player: ${scorePlayer} `);
-    console.log(`The score computer: ${scoreComputer} `);
-    console.log(`The winner is: ${winnerRound} `);
+//function which display the current result
+function displayCurrentResult(result, scorePlayer, scoreComputer){
+   
+
+    const pPlayer = document.querySelector("#player-score");
+    pPlayer.textContent = `The score player: ${scorePlayer} `;
+
+    
+    const pComputer = document.querySelector("#computer-score");
+    pComputer.textContent = `The score computer: ${scoreComputer} `;
+
+    if(result === 'tie'){
+        const pTie = document.querySelector("#current-winner");
+        pTie.textContent = `The result is: ${result} `;
+    }
+    else{
+        const pWinner = document.querySelector("#current-winner");
+        pWinner.textContent = `The winner of the round is: ${result} `;
+    }
+    
+
 }
+
+//function which display the winner of the match
+function displayWinner(player,computer){
+    const results = document.querySelector(".results");
+    const pWinnerMatch = document.createElement('p');
+
+    (player > computer) ? pWinnerMatch.textContent = "THE WINNER OF THE MATCH IS THE PLAYER": pWinnerMatch.textContent = "THE WINNER OF THE MATCH IS THE COMPUTER";   
+    
+
+
+    results.appendChild(pWinnerMatch);
+}
+
 
 
 
 //function of the game
-function game(){
-    let scorePlayer = 0;
-    let scoreComputer = 0;
-    let roundNumber= 0;
-    let totalRound = 5;
+function game(currentWinner){
+    (currentWinner === 'tie') ? itsTie:
+    (currentWinner === 'computer') ? scoreComputer += 1:
+    (currentWinner === 'player') ? scorePlayer += 1: errorMessage();
 
-    let keepGoing = true;
-
-    while(keepGoing){
-
-        roundNumber ++;
-        winner = playRound();
-
-        (winner === 'tie') ? roundNumber--:
-        (winner === 'computer') ? scoreComputer += 1:
-        (winner === 'player') ? scorePlayer += 1: errorMessage();
-
-        displayCurrentResult(winner, scorePlayer, scoreComputer);
+    checkWinner(scorePlayer, scoreComputer);
     
-        if(roundNumber === totalRound){
-            keepGoing = false;
-        }
+    displayCurrentResult(currentWinner, scorePlayer,scoreComputer);
+}
+
+//check if the amount of round is equal to total
+function checkWinner (player,computer){
+    if(scoreComputer === maxScore || scorePlayer === maxScore){
+        displayWinner(scorePlayer, scoreComputer);
+        disabledButtons();     
     }
 }
 
 
+//function which disabled the buttons
+function disabledButtons(){
+    document.getElementById("paper").disabled = true; 
+    document.getElementById("rock").disabled = true; 
+    document.getElementById("scissor").disabled = true; 
+   
+}
+
+
 //function which execute one round of the game
-function playRound(){
+function playRound(e){
+    //remove image for the last round
+    removeImageForLastRound();
+
+
     //user input
-    let player = getUserInput();
+    player = e.target.id;
+    
     //computer selection
     let computer = getComputerSelection();
     //processing winner
     let winner = getWinnerRound(player,computer);
 
+
+    // display image of the player and computer choice
+    displayChoiceImage(player, 'playerChoice');
+    displayChoiceImage(computer, 'computerChoice');
+
+
     //return round winner
-    return winner;
+    return game(winner);
 }
 
-game();
+
+function errorMessage(){
+    const results = document.querySelector(".results");
+
+    const pError = document.createElement('p');
+    pError.textContent = "An error has ocurred";
+    results.appendChild(pError);
+
+}
+
+function displayChoiceImage(choice, idImageUser){
+
+    const imageSelector = document.getElementById(idImageUser);
+
+    if(choice=== 'rock'){
+        imageSelector.setAttribute('src', 'img/rock.png');   
+    }
+    else if(choice === 'scissor'){
+        imageSelector.setAttribute('src', 'img/scissor.png');
+    }
+    else if(choice === 'paper'){
+        imageSelector.setAttribute('src', 'img/paper.png');
+    }
+  
+}
+
+
+function removeImageForLastRound(){
+    const remImagePlayer = document.getElementById('playerChoice');
+    const remImageComputer = document.getElementById('computerChoice');
+
+    remImageComputer.src = '';
+    remImagePlayer.src = '';
+}
