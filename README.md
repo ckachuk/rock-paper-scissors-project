@@ -8,3 +8,5 @@ Event handler,
 Regular expresions,
 CSS grid, 
 CSS flexbox
+
+try demo : https://ckachuk.github.io/rock-paper-scissors-project/
