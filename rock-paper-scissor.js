@@ -184,9 +184,10 @@ function errorMessage(){
 function displayChoiceImage(choice, idImageUser){
 
     const imageSelector = document.getElementById(idImageUser);
+   
 
     if(choice=== 'rock'){
-        imageSelector.setAttribute('src', 'img/rock.png');   
+        imageSelector.setAttribute('src', 'img/rock.png'); 
     }
     else if(choice === 'scissor'){
         imageSelector.setAttribute('src', 'img/scissor.png');
